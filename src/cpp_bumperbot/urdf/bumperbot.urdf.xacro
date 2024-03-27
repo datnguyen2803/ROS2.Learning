@@ -172,11 +172,10 @@
 		</collision>
 	</link>
 
-	<joint name="can_joint" type="continuous">
+	<joint name="can_joint" type="fixed">
 		<parent link="base_link" />
 		<child link="can_link" />
 		<origin rpy="0 0 0" xyz="0 0 0.078" />
-		<axis xyz="1 0 0" />
 	</joint>
 
 </robot>

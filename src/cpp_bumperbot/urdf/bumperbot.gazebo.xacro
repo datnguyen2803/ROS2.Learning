@@ -18,15 +18,6 @@
 		</joint>
 	</transmission>
 
-	<transmission name="can_transmission">
-		<plugin>transmission_interface/SimpleTransmission</plugin>
-		<actuator name="can_motor" role="actuator_can"/>
-		<joint name="can_joint" role="joint_can">
-			<mechanical_reduction>1.0</mechanical_reduction>
-		</joint>
-	</transmission>
-
-	
 	<gazebo reference="wheel_right_link">
 		<mu1>100000000000000.0</mu1>
 		<mu2>100000000000000.0</mu2>
