@@ -27,6 +27,12 @@ SimpleController::SimpleController(const std::string& node_name)
 	joint_sub_ = this->create_subscription<sensor_msgs::msg::JointState>("/joint_states", 10,
 		std::bind(&SimpleController::jointCallback, this, _1));
 	odom_pub_ = this->create_publisher<nav_msgs::msg::Odometry>("/bumperbot_controller/odom", 10);
+
+	speed_conversion_ << wheel_radius_ / 2, wheel_radius_ / 2,
+						wheel_radius_ / wheel_separation_, -wheel_radius_ / wheel_separation_;
+
+	RCLCPP_INFO_STREAM(this->get_logger(), "The conversion matrix is \n" << speed_conversion_);
+
 	odom_msg_.header.frame_id = "odom";
 	odom_msg_.child_frame_id = "base_footprint";
 	odom_msg_.pose.pose.orientation.x = 0.0;
@@ -34,10 +40,9 @@ SimpleController::SimpleController(const std::string& node_name)
 	odom_msg_.pose.pose.orientation.z = 0.0;
 	odom_msg_.pose.pose.orientation.w = 1.0;
 
-	speed_conversion_ << wheel_radius_ / 2, wheel_radius_ / 2,
-						wheel_radius_ / wheel_separation_, -wheel_radius_ / wheel_separation_;
-
-	RCLCPP_INFO_STREAM(this->get_logger(), "The conversion matrix is \n" << speed_conversion_);
+	tf_broadcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(*this);
+	odom_tf_msg_.header.frame_id = "odom";
+	odom_tf_msg_.child_frame_id = "base_footprint";
 
 }
 
@@ -76,12 +81,14 @@ void SimpleController::jointCallback(const sensor_msgs::msg::JointState &msg)
 	double d_s = wheel_radius_/2 * (dp_right + dp_left);
 	double d_theta = wheel_radius_/wheel_separation_ * (dp_right - dp_left);
 
+	// Odometry data
 	theta_ += d_theta;
 	x_ += d_s * cos(theta_);
 	y_ += d_s * sin(theta_);
 
 	RCLCPP_INFO_STREAM(this->get_logger(), "Position: \tx: " << x_ << ", y: " << y_ << "\nOrientation\ttheta: " << theta_);
 
+	// Public odometry data for other nodes to use
 	tf2::Quaternion q;
 	q.setRPY(0, 0, theta_);
 	odom_msg_.pose.pose.orientation.x = q.x();
@@ -95,6 +102,18 @@ void SimpleController::jointCallback(const sensor_msgs::msg::JointState &msg)
 	odom_msg_.twist.twist.angular.z = angular_vel;
 
 	odom_pub_->publish(odom_msg_);
+
+	// Broadcast odometry transform
+	odom_tf_msg_.header.stamp = get_clock()->now();
+	odom_tf_msg_.transform.translation.x = x_;
+	odom_tf_msg_.transform.translation.y = y_;
+	odom_tf_msg_.transform.rotation.x = q.x();
+	odom_tf_msg_.transform.rotation.y = q.y();
+	odom_tf_msg_.transform.rotation.z = q.z();
+	odom_tf_msg_.transform.rotation.w = q.w();
+
+	tf_broadcaster_->sendTransform(odom_tf_msg_);
+
 
 }
 
