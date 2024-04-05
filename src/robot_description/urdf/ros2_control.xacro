@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+	<ros2_control name="RobotSystem" type="system">
+
+		<!-- load interfaces -->
+		<hardware>
+			<plugin>robot_firmware/WheelInterface</plugin>
+		</hardware>
+
+		<!-- define joints and interfaces -->
+		<joint name="wheel_left_joint">
+			<command_interface name="velocity">
+				<param name='min'>-10</param>
+				<param name='max'>10</param>
+			</command_interface>
+			<state_interface name="velocity"/>
+			<state_interface name="position"/>
+		</joint>
+		<joint name="wheel_right_joint">
+			<command_interface name="velocity">
+				<param name='min'>-10</param>
+				<param name='max'>10</param>
+			</command_interface>
+			<state_interface name="velocity"/>
+			<state_interface name="position"/>
+		</joint>
+
+	</ros2_control>
+
+</robot>
