@@ -3,10 +3,20 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 	<ros2_control name="RobotSystem" type="system">
 
-		<!-- load interfaces -->
-		<hardware>
-			<plugin>robot_firmware/WheelInterface</plugin>
-		</hardware>
+		<!-- ros2_control in gazebo env -->
+		<xacro:if value="$(arg is_simulate)">
+			<hardware>
+				<plugin>gazebo_ros2_control/GazeboSystem</plugin>
+			</hardware>
+		</xacro:if>
+
+
+		<!-- load interfaces for real robot -->
+		<xacro:unless value="$(arg is_simulate)">
+			<hardware>
+				<plugin>robot_firmware/WheelInterface</plugin>
+			</hardware>
+		</xacro:unless>
 
 		<!-- define joints and interfaces -->
 		<joint name="wheel_left_joint">
