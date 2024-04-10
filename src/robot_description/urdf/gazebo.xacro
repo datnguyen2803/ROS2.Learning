@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<robot name="bumperbot" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
 
   <!-- Move this one to ros2 control -->
   <transmission name="wheel_right_transmission">
@@ -59,12 +59,13 @@
     <maxVel>1.0</maxVel>
   </gazebo>
 
-  <!-- ROS 2 Control -->
+  <!-- add plugin for ROS2 Control -->
   <gazebo>
     <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
       <robot_param>robot_description</robot_param>
-      <robot_param_node>robot_state_publisher</robot_param_node>
-      <parameters>$(find bumperbot_controller)/config/bumperbot_controllers.yaml</parameters>
+      <robot_param_node>robot_state_publisher_node</robot_param_node>
+      <parameters>$(find robot_controller)/config/robot_controllers.yaml</parameters>
+      <controller_manager_name>simulation_controller_manager</controller_manager_name>
     </plugin>
   </gazebo>
 

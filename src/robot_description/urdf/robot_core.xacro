@@ -15,13 +15,13 @@
 		<visual>
 			<origin rpy="0 0 0" xyz="0 0 0"/>
 			<geometry>
-				<mesh filename="package://cpp_bumperbot/meshes/base_link.STL" />
+				<mesh filename="package://robot_description/meshes/base_link.STL" />
 			</geometry>
 		</visual>
 		<collision>
 			<origin rpy="0 0 0" xyz="0 0 0"/>
 			<geometry>
-				<mesh filename="package://cpp_bumperbot/meshes/base_link.STL" />
+				<mesh filename="package://robot_description/meshes/base_link.STL" />
 			</geometry>
 		</collision>
 	</link>
@@ -43,7 +43,7 @@
 		<visual>
 			<origin rpy="1.57 0 0" xyz="0 0 0"/>
 			<geometry>
-				<mesh filename="package://cpp_bumperbot/meshes/wheel_right_link.STL" />
+				<mesh filename="package://robot_description/meshes/wheel_right_link.STL" />
 			</geometry>
 		</visual>
 		<collision>
@@ -73,7 +73,7 @@
 		<visual>
 			<origin rpy="-1.57 0 0" xyz="0 0 0"/>
 			<geometry>
-				<mesh filename="package://cpp_bumperbot/meshes/wheel_left_link.STL" />
+				<mesh filename="package://robot_description/meshes/wheel_left_link.STL" />
 			</geometry>
 		</visual>
 		<collision>
@@ -103,7 +103,7 @@
 		<visual>
 			<origin rpy="0 0 0" xyz="0 0 0"/>
 			<geometry>
-				<mesh filename="package://cpp_bumperbot/meshes/caster_front_link.STL" />
+				<mesh filename="package://robot_description/meshes/caster_front_link.STL" />
 			</geometry>
 		</visual>
 		<collision>
@@ -131,7 +131,7 @@
 		<visual>
 			<origin rpy="0 0 0" xyz="0 0 0"/>
 			<geometry>
-				<mesh filename="package://cpp_bumperbot/meshes/caster_rear_link.STL" />
+				<mesh filename="package://robot_description/meshes/caster_rear_link.STL" />
 			</geometry>
 		</visual>
 		<collision>
@@ -159,7 +159,7 @@
 		<visual>
 			<origin rpy="1.57 0 0" xyz="-0.032 0.032 0"/>
 			<geometry>
-				<mesh filename="package://cpp_bumperbot/meshes/can_link.STL" />
+				<mesh filename="package://robot_description/meshes/can_link.STL" />
 			</geometry>
 		</visual>
 		<collision>

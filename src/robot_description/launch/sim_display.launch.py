@@ -7,12 +7,14 @@ from launch_ros.parameter_descriptions import ParameterValue
 from launch.substitutions import Command, LaunchConfiguration
 
 def generate_launch_description():
+
 	model_arg = DeclareLaunchArgument(
 		name="model",
 		default_value=os.path.join(get_package_share_directory("robot_description"), "urdf", "robot.urdf.xacro"),
 		description="Absolute path to robot urdf file",
 	)
-	robot_description = ParameterValue(Command(["xacro ", LaunchConfiguration("model")]), value_type=str)
+
+	# robot_description = Command(['ros2 param get --hide-type /robot_state_publisher_node robot_description'])
 
 	# robot_state_publisher_node = Node(
 	# 	package="robot_state_publisher",
@@ -21,12 +23,12 @@ def generate_launch_description():
 	# 	parameters=[{"robot_description": robot_description}],
 	# )
 
-	# # ui to control joints
-	# joint_state_publisher_gui = Node(
-	# 	package="joint_state_publisher_gui",
-	# 	executable="joint_state_publisher_gui",
+	# ui to control joints, must have
+	joint_state_publisher_gui = Node(
+		package="joint_state_publisher_gui",
+		executable="joint_state_publisher_gui",
 
-	# )
+	)
 
 	rviz_node = Node(
 		package="rviz2",
@@ -38,6 +40,6 @@ def generate_launch_description():
 	return LaunchDescription([
 		model_arg,
 		# robot_state_publisher_node,
-		# joint_state_publisher_gui,
+		joint_state_publisher_gui,
 		rviz_node
 	])
