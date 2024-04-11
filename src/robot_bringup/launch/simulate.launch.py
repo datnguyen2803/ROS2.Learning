@@ -60,10 +60,46 @@ def generate_launch_description():
 		),
 	)
 
+	# run_nav2_bringup_cmd = IncludeLaunchDescription(
+	# 	os.path.join(
+	# 		get_package_share_directory("nav2_bringup"),
+	# 		"launch",
+	# 		"navigation_launch.py"
+	# 	),
+	# 	launch_arguments={'use_sim_time': 'true'}.items()
+	# )
+
+	# run_delayed_nav2_bringup_cmd = RegisterEventHandler(
+	# 	event_handler=OnProcessStart(
+	# 		target_action=run_gazebo_cmd,
+	# 		on_start=[run_nav2_bringup_cmd]
+	# 	)
+	# )
+	# run_delayed_nav2_bringup_cmd = TimerAction(period=5.0, actions=[run_nav2_bringup_cmd])
+
+	# run_slam_toolbox_cmd = IncludeLaunchDescription(
+	# 	os.path.join(
+	# 		get_package_share_directory("slam_toolbox"),
+	# 		"launch",
+	# 		"online_async_launch.py"
+	# 	),
+	# 	launch_arguments={'use_sim_time': 'true'}.items()
+	# )
+
+	# run_delayed_slam_toolbox_cmd = RegisterEventHandler(
+	# 	event_handler=OnProcessStart(
+	# 		target_action=run_nav2_bringup_cmd,
+	# 		on_start=[run_slam_toolbox_cmd]
+	# 	)
+	# )
+	# run_delayed_slam_toolbox_cmd = TimerAction(period=10.0, actions=[run_slam_toolbox_cmd])
+
 	return LaunchDescription([
 		start_robot_state_publisher_cmd,
 		run_rviz_cmd,
 		run_gazebo_cmd,
 		run_controllers_cmd,
 		run_joystick_cmd,
+		# run_delayed_nav2_bringup_cmd,
+		# run_delayed_slam_toolbox_cmd,
 	])

@@ -30,12 +30,12 @@ def generate_launch_description():
 		'scan_world.world'
 	)
 
-	urdf_path = os.path.join(
-		get_package_share_directory('turtlebot3_gazebo'),
-		'models',
-		'turtlebot3_waffle',
-		'model.sdf'
-    )
+	# urdf_path = os.path.join(
+	# 	get_package_share_directory('turtlebot3_gazebo'),
+	# 	'models',
+	# 	'turtlebot3_waffle',
+	# 	'model.sdf'
+    # )
 
 	start_gazebo_server_cmd = IncludeLaunchDescription(
 		PythonLaunchDescriptionSource(
@@ -64,8 +64,8 @@ def generate_launch_description():
 		name="gazebo_node",
 		arguments=[ #required arguments must be passed
 			"-entity", "mikey_robot",
-			# "-topic", "robot_description",
-			"-file", urdf_path,
+			"-topic", "robot_description",
+		# 	"-file", urdf_path,
 			'-x', '0.00',
 			'-y', '0.00',
 			'-z', '0.00',

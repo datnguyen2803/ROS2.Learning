@@ -148,32 +148,62 @@
 		<origin rpy="0 0 0" xyz="-0.047 0 -0.027" />
 	</joint>
 
-	<link name="can_link">
+	<!-- <link name="imu_link">
 		<inertial>
-			<origin xyz="3.8996812895542E-07 2.40073004698083E-07 0.00219173397061509" rpy="0 0 0" />
-			<mass value="1.44379265037902E-06" />
-			<inertia ixx="7.23075276010246E-11" ixy="-6.10956872363424E-16" ixz="2.22849693527207E-15"
-					 iyy="3.87137930859167E-11" iyz="2.939098587861E-15"
-					 izz="1.00967486676306E-10" />
+		<origin xyz="-0.00552433659106688 0.000168210391520346 0.000514000497342681" rpy="0 0 0" />
+		<mass value="0.000528415362211671" />
+		<inertia ixx="1.46176048428261E-08" ixy="1.40015117949421E-10" ixz="-1.99633872937403E-12"
+				iyy="8.59662482954888E-09" iyz="7.52375112767959E-12"
+				izz="2.30279421279312E-08" />
 		</inertial>
 		<visual>
-			<origin rpy="1.57 0 0" xyz="-0.032 0.032 0"/>
-			<geometry>
-				<mesh filename="package://robot_description/meshes/can_link.STL" />
-			</geometry>
+		<origin xyz="0 0 0" rpy="0 0 0" />
+		<geometry>
+			<mesh filename="package://robot_description/meshes/imu_link.STL" />
+		</geometry>
+		<material name="">
+			<color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+		</material>
 		</visual>
 		<collision>
-			<origin rpy="1.57 0 0" xyz="-0.032 0.032 0"/>
-			<geometry>
-				<sphere radius="0.01"/>
-			</geometry>
+		<origin xyz="0 0 0" rpy="0 0 0" />
+		<geometry>
+			<mesh filename="package://robot_description/meshes/imu_link.STL" />
+		</geometry>
 		</collision>
 	</link>
-
-	<joint name="can_joint" type="fixed">
+	
+	<joint name="imu_joint" type="fixed">
+		<origin xyz="0 0 0.0698986241758014" rpy="0 0 0" />
 		<parent link="base_link" />
-		<child link="can_link" />
-		<origin rpy="0 0 0" xyz="0 0 0.078" />
+		<child link="imu_link" />
+		<axis xyz="0 0 0" />
+	</joint> -->
+
+	<!-- LIDAR -->
+	<link name="lidar_link">
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<geometry>
+				<mesh filename="package://robot_description/meshes/rplidar_top.dae"/>
+			</geometry>
+		</visual> 
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<geometry>
+				<cylinder radius="0.037" length="0.021"/>
+			</geometry>
+		</collision>
+		<!-- <xacro:cylinder_inertia mass="0.07" length="0.021" radius="0.037">
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+		</xacro:cylinder_inertia> -->
+	</link>
+
+	<joint name="lidar_joint" type="fixed">
+		<parent link="base_link"/>
+		<child link="lidar_link"/>
+		<origin xyz="0.0 0.0 0.08" rpy="0 0 0"/>
+		<axis xyz="0 0 1"/>
 	</joint>
 
 </robot>
