@@ -60,14 +60,19 @@ def generate_launch_description():
 		),
 	)
 
-	# run_nav2_bringup_cmd = IncludeLaunchDescription(
-	# 	os.path.join(
-	# 		get_package_share_directory("nav2_bringup"),
-	# 		"launch",
-	# 		"navigation_launch.py"
-	# 	),
-	# 	launch_arguments={'use_sim_time': 'true'}.items()
-	# )
+	run_navigation_stack_cmd = IncludeLaunchDescription(
+		os.path.join(
+			get_package_share_directory("robot_navigation"),
+			"launch",
+			"navigation.launch.py"
+		),
+		launch_arguments={
+			'use_sim_time': 'true',
+			# 'params_file': '/home/mikey/mikey_robot/install/robot_navigation/share/robot_navigation/config/nav2_params.yaml',
+			}.items()
+	)
+
+	# print("mikey done nav2 stack")
 
 	# run_delayed_nav2_bringup_cmd = RegisterEventHandler(
 	# 	event_handler=OnProcessStart(
@@ -75,16 +80,16 @@ def generate_launch_description():
 	# 		on_start=[run_nav2_bringup_cmd]
 	# 	)
 	# )
-	# run_delayed_nav2_bringup_cmd = TimerAction(period=5.0, actions=[run_nav2_bringup_cmd])
+	# run_delayed_nav2_bringup_cmd = TimerAction(period=5.0, actions=[run_navigation_stack_cmd])
 
-	# run_slam_toolbox_cmd = IncludeLaunchDescription(
-	# 	os.path.join(
-	# 		get_package_share_directory("slam_toolbox"),
-	# 		"launch",
-	# 		"online_async_launch.py"
-	# 	),
-	# 	launch_arguments={'use_sim_time': 'true'}.items()
-	# )
+	run_slam_toolbox_cmd = IncludeLaunchDescription(
+		os.path.join(
+			get_package_share_directory("robot_navigation"),
+			"launch",
+			"slam_online_async.launch.py"
+		),
+		# launch_arguments={'use_sim_time': 'true'}.items()
+	)
 
 	# run_delayed_slam_toolbox_cmd = RegisterEventHandler(
 	# 	event_handler=OnProcessStart(
@@ -94,12 +99,20 @@ def generate_launch_description():
 	# )
 	# run_delayed_slam_toolbox_cmd = TimerAction(period=10.0, actions=[run_slam_toolbox_cmd])
 
+	run_twist_mux_cmd = Node(
+		package="twist_mux",
+		executable="twist_mux",
+		parameters=[os.path.join(get_package_share_directory("robot_controller"), "config", "twist_mux.yaml")],
+		remappings=[("/cmd_vel_out", "/wheel_controller/cmd_vel_unstamped")],
+	)
+
 	return LaunchDescription([
 		start_robot_state_publisher_cmd,
 		run_rviz_cmd,
 		run_gazebo_cmd,
 		run_controllers_cmd,
 		run_joystick_cmd,
-		# run_delayed_nav2_bringup_cmd,
-		# run_delayed_slam_toolbox_cmd,
+		run_navigation_stack_cmd,
+		run_slam_toolbox_cmd,
+		run_twist_mux_cmd,
 	])

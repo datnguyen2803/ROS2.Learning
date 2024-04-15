@@ -25,6 +25,7 @@ def generate_launch_description():
 		executable="joy_teleop",
 		name="joy_teleop",
 		parameters=[os.path.join(get_package_share_directory('robot_controller'), 'config', 'joystick_teleop.yaml')],
+		remappings=[('/cmd_vel', '/cmd_vel_joy')]
 	)
 
 	return LaunchDescription([
