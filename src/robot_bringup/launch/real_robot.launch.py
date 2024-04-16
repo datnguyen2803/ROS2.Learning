@@ -81,6 +81,13 @@ def generate_launch_description():
 		),
 	)
 
+	run_lidar_cmd = IncludeLaunchDescription(
+		os.path.join(
+			get_package_share_directory("robot_controller"),
+			"launch",
+			"lidar.launch.py"
+		),
+	)
 
 	return LaunchDescription([
 		start_robot_state_publisher_cmd,
@@ -88,5 +95,6 @@ def generate_launch_description():
 		# start_delayed_controller_manager_cmd,
 		# start_delayed_diff_drive_controller_cmd,
 		run_joystick_cmd,
+		run_lidar_cmd
 
 	])
