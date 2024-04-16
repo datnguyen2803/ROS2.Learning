@@ -99,11 +99,13 @@ def generate_launch_description():
 	# )
 	# run_delayed_slam_toolbox_cmd = TimerAction(period=10.0, actions=[run_slam_toolbox_cmd])
 
-	run_twist_mux_cmd = Node(
-		package="twist_mux",
-		executable="twist_mux",
-		parameters=[os.path.join(get_package_share_directory("robot_controller"), "config", "twist_mux.yaml")],
-		remappings=[("/cmd_vel_out", "/wheel_controller/cmd_vel_unstamped")],
+	run_twist_mux_cmd = IncludeLaunchDescription(
+		os.path.join(
+			get_package_share_directory("robot_controller"),
+			"launch",
+			"twist_mux.launch.py"
+		),
+		# launch_arguments={'use_sim_time': 'true'}.items()
 	)
 
 	return LaunchDescription([

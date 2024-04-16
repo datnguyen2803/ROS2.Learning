@@ -19,13 +19,24 @@ def generate_launch_description():
 	)
 
 	# Joystick teleop
-	# Subscribe to /<topic_xxx> and publish velocity mesage for simple controller
+
+	# Use when publish geometry_msgs/msg/TwistStamped
+	# joy_teleop = Node(
+	# 	package="joy_teleop",
+	# 	executable="joy_teleop",
+	# 	name="joy_teleop",
+	# 	parameters=[os.path.join(get_package_share_directory('robot_controller'), 'config', 'joystick_teleop.yaml')],
+	# 	# remappings=[('/cmd_vel', '/cmd_vel_joy')]
+	# )
+
+
+	# Use when publish geometry_msgs/msg/Twist
 	joy_teleop = Node(
-		package="joy_teleop",
-		executable="joy_teleop",
-		name="joy_teleop",
+		package="teleop_twist_joy",
+		executable="teleop_node",
+		name="teleop_twist_joy",
 		parameters=[os.path.join(get_package_share_directory('robot_controller'), 'config', 'joystick_teleop.yaml')],
-		# remappings=[('/cmd_vel', '/cmd_vel_joy')]
+		remappings=[('/cmd_vel', '/cmd_vel_joy')]
 	)
 
 	return LaunchDescription([
