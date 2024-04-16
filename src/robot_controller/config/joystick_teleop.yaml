@@ -3,8 +3,8 @@ joy_teleop:
     move:
       type: topic
       interface_type: geometry_msgs/msg/TwistStamped
-      topic_name: wheel_controller/cmd_vel_unstamped
-
+      # topic_name: wheel_controller/cmd_vel_unstamped
+      topic_name: /cmd_vel_joy
       deadman_buttons: [5]
 
       axis_mappings:
