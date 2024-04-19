@@ -65,16 +65,8 @@
       <robot_param>robot_description</robot_param>
       <robot_param_node>robot_state_publisher_node</robot_param_node>
       <parameters>$(find robot_controller)/config/robot_controllers.yaml</parameters>
-      <controller_manager_name>simulation_controller_manager</controller_manager_name>
     </plugin>
   </gazebo>
-
-  <!-- ros2_control interfaces in gazebo env -->
-  <!-- <xacro:if value="$(arg is_simulate)"> -->
-    <!-- <hardware>
-      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
-    </hardware> -->
-  <!-- </xacro:if> -->
 
   <!-- IMU -->
   <!-- <gazebo reference="imu_link">

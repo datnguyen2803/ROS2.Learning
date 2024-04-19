@@ -9,48 +9,62 @@ from launch_ros.parameter_descriptions import ParameterValue
 
 def generate_launch_description():
 	# find files
-	# controller_manager_params_file = os.path.join(
-	# 			get_package_share_directory('robot_controller'),
-	# 			"config",
-	# 			"robot_controllers.yaml"
-	# 		)
+	controller_manager_params_file = os.path.join(
+				get_package_share_directory('robot_controller'),
+				"config",
+				"robot_controllers.yaml"
+			)
 	
-	# robot_description = ParameterValue(Command(['ros2 param get --hide-type /robot_state_publisher_node robot_description']), value_type=str)
+	robot_description = ParameterValue(Command(['ros2 param get --hide-type /robot_state_publisher_node robot_description']), value_type=str)
 
-	# # create controller manager
-	# start_controller_manager_cmd = Node(
-	# 	package='controller_manager',
-	# 	executable='ros2_control_node',
-	# 	parameters=[
-	# 		{'robot_description': robot_description},
-	# 		controller_manager_params_file
+	# create controller manager
+	start_controller_manager_cmd = Node(
+		package='controller_manager',
+		executable='ros2_control_node',
+		parameters=[
+			{'robot_description': robot_description},
+			controller_manager_params_file
 			
-	# 	]
-	# )
+		]
+	)
 
-	# # delay 2s before create controller manager
-	# start_delayed_controller_manager_cmd = TimerAction(period=2.0, actions=[start_controller_manager_cmd])
+	# delay 2s before create controller manager
+	start_delayed_controller_manager_cmd = TimerAction(period=2.0, actions=[start_controller_manager_cmd])
 
 	# spawner != ros2_control_node that spawner runs only once but ros2_control_node spins
 	start_diff_drive_controller_cmd = Node(
 		package="controller_manager",
 		executable="spawner",
-		arguments=["wheel_controller"]
+		arguments=["wheel_controller", "--controller-manager", "/controller_manager"]
 	)
 
-	# # load diff drive controller until controller manager is ready
-	# start_delayed_diff_drive_controller_cmd = RegisterEventHandler(
-	# 	event_handler=OnProcessStart(
-	# 		target_action=start_controller_manager_cmd,
-	# 		on_start=[start_diff_drive_controller_cmd]
-	# 	)
-	# )
+	# load diff drive controller until controller manager is ready
+	start_delayed_diff_drive_controller_cmd = RegisterEventHandler(
+		event_handler=OnProcessStart(
+			target_action=start_controller_manager_cmd,
+			on_start=[start_diff_drive_controller_cmd]
+		)
+	)
+
+	start_joint_state_broadcaster_cmd = Node(
+		package="controller_manager",
+		executable="spawner",
+		arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"]
+	)
+
+	# load joint state broadcaster until controller manager is ready
+	start_delayed_joint_state_broadcaster_cmd = RegisterEventHandler(
+		event_handler=OnProcessStart(
+			target_action=start_controller_manager_cmd,
+			on_start=[start_joint_state_broadcaster_cmd]
+		)
+	)
 
 	return LaunchDescription([
-		# start_delayed_controller_manager_cmd,
-		# start_delayed_diff_drive_controller_cmd,
+		start_delayed_controller_manager_cmd,
+		start_delayed_diff_drive_controller_cmd,
+		start_delayed_joint_state_broadcaster_cmd, 
 
-
-		start_diff_drive_controller_cmd,
+		# start_diff_drive_controller_cmd,
 
 	])

@@ -8,11 +8,11 @@ from launch.substitutions import Command, LaunchConfiguration
 
 def generate_launch_description():
 
-	use_sim_time = LaunchConfiguration('use_sim_time', default='true')
+	use_sim_time = LaunchConfiguration('use_sim_time', default='false')
 
 	use_sim_time_arg = DeclareLaunchArgument(
 			'use_sim_time',
-			default_value='true',
+			default_value='false',
 			description='Use simulation (Gazebo) clock if true')
 
 	model_arg = DeclareLaunchArgument(

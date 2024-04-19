@@ -79,7 +79,7 @@ CallbackReturn WheelInterface::on_init(const hardware_interface::HardwareInfo &h
 	}
 
 	left_wheel_.setup(info_.joints[0].name, config_.enc_ticks_per_rev);
-	left_wheel_.setup(info_.joints[1].name, config_.enc_ticks_per_rev);
+	right_wheel_.setup(info_.joints[1].name, config_.enc_ticks_per_rev);
 
 	velocity_commands_.reserve(info_.joints.size());
 	position_states_.reserve(info_.joints.size());
@@ -164,6 +164,8 @@ hardware_interface::return_type WheelInterface::write(const rclcpp::Time &/*time
 
 	double left_motor_counts_per_loop = left_wheel_.command / left_wheel_.rads_per_tick / config_.loop_rate;
 	double right_motor_counts_per_loop = right_wheel_.command / right_wheel_.rads_per_tick / config_.loop_rate;
+
+	// RCLCPP_INFO(logger, "ntdat left_wheel_.command = %f, right_wheel_.command = %f", left_wheel_.command, right_wheel_.command);
 
 	// Send commands to motor driver
 	set_motor_speeds(left_motor_counts_per_loop, right_motor_counts_per_loop);

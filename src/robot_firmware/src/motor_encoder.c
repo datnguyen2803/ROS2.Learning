@@ -43,7 +43,7 @@ void right_wheel_pulse()
     // Read encoder direction value for right wheel
     right_wheel_direction = digitalRead(RIGHT_WHL_ENC_DIR);
 
-    if(right_wheel_direction = 1)
+    if(right_wheel_direction == 1)
         right_wheel_pulse_count++;
     else 
         right_wheel_pulse_count--;
@@ -56,6 +56,9 @@ void set_motor_speeds(double left_wheel_command, double right_wheel_command)
     DIR left_motor_direction;
     DIR right_motor_direction;
     
+	DEBUG("Left wheel command: %f\n", left_wheel_command);
+	DEBUG("Right wheel command: %f\n", right_wheel_command);
+
     // Tune motor speeds by adjusting the command coefficients. These are dependent on the number of encoder ticks. 3000 ticks and above work well with coefficients of 1.0
     double left_motor_speed = ceil(left_wheel_command * 1.65);
     double right_motor_speed = ceil(right_wheel_command * 1.65);
@@ -72,12 +75,16 @@ void set_motor_speeds(double left_wheel_command, double right_wheel_command)
         right_motor_direction = BACKWARD;
 
     // Run motors with specified direction and speeds
-    Motor_Run(MOTORA, left_motor_direction, (int) abs(left_motor_speed));
-    Motor_Run(MOTORB, right_motor_direction, (int) abs(right_motor_speed));
+	printf("mikey check fabs(left_motor_speed) = %f\n", fabs(left_motor_speed));
+	printf("mikey check fabs(right_motor_speed) = %f\n", fabs(right_motor_speed));
+    Motor_Run(MOTORA, left_motor_direction, (int) fabs(left_motor_speed));
+    Motor_Run(MOTORB, right_motor_direction, (int) fabs(right_motor_speed));
 }
 
 void handler(int signo)
 {
+	(void) signo;
+
     Motor_Stop(MOTORA);
     Motor_Stop(MOTORB);
 

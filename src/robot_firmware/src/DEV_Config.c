@@ -204,6 +204,8 @@ void DEV_SPI_WriteByte(uint8_t Value)
         DEV_HARDWARE_SPI_TransferByte(Value);
     #endif
 #endif
+
+(void)Value;
 }
 
 void DEV_SPI_Write_nByte(uint8_t *pData, uint32_t Len)
@@ -221,6 +223,9 @@ void DEV_SPI_Write_nByte(uint8_t *pData, uint32_t Len)
         
     #endif
 #endif
+
+(void)pData;
+(void)Len;
 }
 /******************************************************************************
 function:	I2C Function initialization and transfer

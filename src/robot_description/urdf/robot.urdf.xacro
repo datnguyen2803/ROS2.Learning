@@ -3,7 +3,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot">
 
 	<!-- load parameters from launch file -->
-	<xacro:arg name="is_simulate" default="true" />
+	<xacro:arg name="is_simulate" default="false" />
 
 	<!-- load from other xacro files -->
 	<xacro:include filename="robot_core.xacro" />

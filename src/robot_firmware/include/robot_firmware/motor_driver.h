@@ -13,6 +13,11 @@
 * | Info        :   Basic version
 *
 ******************************************************************************/
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __MOTOR_DRIVER_H__
 #define __MOTOR_DRIVER_H__
 
@@ -40,4 +45,8 @@ void Motor_Run(UBYTE motor, DIR dir, UWORD speed);
 void Motor_Stop(UBYTE motor);
 UBYTE Motor_Direction(UBYTE motor);
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif

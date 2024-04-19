@@ -35,24 +35,26 @@ ament_target_dependencies(
 )
 
 # Link WiringPi library to lidarbot_hardware target
-target_link_libraries(${PROJECT_NAME} wiringPi)
+target_link_libraries(robot_firmware wiringPi)
 
 # Export hardware plugin
 pluginlib_export_plugin_description_file(hardware_interface robot_firmware_interfaces.xml)
 
-
-install(
-	TARGETS robot_firmware
-	DESTINATION share/${PROJECT_NAME}
-	LIBRARY DESTINATION lib
-	RUNTIME DESTINATION lib/${PROJECT_NAME}
-)
 
 # INSTALL
 install(
 	DIRECTORY include/
 	DESTINATION include/${PROJECT_NAME}
 )
+
+install(
+	TARGETS robot_firmware
+	EXPORT export_robot_firmware
+	DESTINATION share/${PROJECT_NAME}
+	LIBRARY DESTINATION lib
+	RUNTIME DESTINATION lib/${PROJECT_NAME}
+)
+
 
 install(
   DIRECTORY launch
@@ -63,6 +65,7 @@ include_directories(include)
 
 # EXPORTS
 ament_export_libraries(robot_firmware)
+ament_export_targets(export_robot_firmware HAS_LIBRARY_TARGET)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

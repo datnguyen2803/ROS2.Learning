@@ -126,4 +126,6 @@ UBYTE Motor_Direction(UBYTE motor)
         else if(bin1_value == 1 && bin2_value == 0)
             return 0;
     }
+
+	return 0;
 }
