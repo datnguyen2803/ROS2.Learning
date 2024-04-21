@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
-	<ros2_control name="RobotSystem" type="system">
+	<ros2_control name="MotionPart" type="system">
 
 		<!-- ros2_control interfaces in gazebo env -->
-		<xacro:if value="$(arg is_simulate)">
+		<xacro:if value="${is_simulate == yes}">
 			<hardware>
 				<plugin>gazebo_ros2_control/GazeboSystem</plugin>
 			</hardware>
@@ -12,7 +12,7 @@
 
 
 		<!-- load interfaces for real robot -->
-		<xacro:unless value="$(arg is_simulate)">
+		<xacro:unless value="${is_simulate == yes}">
 			<hardware>
 				<plugin>robot_firmware/WheelInterface</plugin>
 			</hardware>
@@ -38,4 +38,25 @@
 
 	</ros2_control>
 
+	<xacro:unless value="${is_simulate == yes}">
+		<ros2_control name="SensorPart" type="sensor">
+			<hardware>
+				<plugin>robot_firmware/MPU6050Interface</plugin>
+				<param name="sensor_name">mpu6050</param>
+				<param name='frame_id'>imu_link</param>
+			</hardware>
+			<sensor name='mpu6050'>
+				<state_interface name='orientation.x'/>
+				<state_interface name='orientation.y'/>
+				<state_interface name='orientation.z'/>
+				<state_interface name='orientation.w'/>
+				<state_interface name='angular_velocity.x'/>
+				<state_interface name='angular_velocity.y'/>
+				<state_interface name='angular_velocity.z'/>
+				<state_interface name='linear_acceleration.x'/>
+				<state_interface name='linear_acceleration.y'/>
+				<state_interface name='linear_acceleration.z'/>  
+			</sensor>
+		</ros2_control>
+	</xacro:unless>
 </robot>
