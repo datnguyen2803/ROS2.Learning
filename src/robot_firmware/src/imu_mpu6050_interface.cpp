@@ -64,7 +64,7 @@ CallbackReturn MPU6050Interface::on_deactivate(const rclcpp_lifecycle::State & /
 	return CallbackReturn::SUCCESS;
 }
 
-return_type MPU6050Interface::read(const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
+return_type MPU6050Interface::read(const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
 	// Obtain current euler angles
 	device_.getAngle(0, &euler_angles_[0]);
@@ -95,7 +95,7 @@ return_type MPU6050Interface::read(const rclcpp::Time & /*time*/, const rclcpp::
 	return return_type::OK;
 }
 
-} // namespace lidarbot_bringup
+} // namespace robot_firmware_interfaces
 
 #include "pluginlib/class_list_macros.hpp"
 

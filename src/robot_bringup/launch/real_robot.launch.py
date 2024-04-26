@@ -16,11 +16,11 @@ def generate_launch_description():
 	package_path_robot_controller = get_package_share_directory("robot_controller")
 	package_path_robot_navigation = get_package_share_directory("robot_navigation")
 
-	use_sim_time = LaunchConfiguration("use_sim_time") # yes or no
+	is_simulate = LaunchConfiguration("is_simulate") # yes or no
 
 	# Declare the launch arguments
-	declare_use_sim_time = DeclareLaunchArgument(
-		name="use_sim_time",
+	declare_is_simulate = DeclareLaunchArgument(
+		name="is_simulate",
 		default_value="no",
 		description="Use simulation (Gazebo) clock if yes",
 	)
@@ -31,7 +31,7 @@ def generate_launch_description():
 			[
 				'xacro ',
 				os.path.join(get_package_share_directory("robot_description"), "urdf", "robot.urdf.xacro"),
-				' is_simulate:=', use_sim_time
+				' is_simulate:=', "true" if is_simulate == "yes" else "false",
 			]
 		), 
 		value_type=str
@@ -52,7 +52,7 @@ def generate_launch_description():
 			"controller.launch.py"
 		),
 		launch_arguments={
-			'use_sim_time': 'false' if use_sim_time == "no" else 'true',
+			'use_sim_time': "true" if is_simulate == "yes" else "false",
 			'rsp_node_name': rsp_node_name,
 		}.items()
 	)
@@ -71,9 +71,9 @@ def generate_launch_description():
 			"launch",
 			"twist_mux.launch.py"
 		),
-		launch_arguments={
-			'use_sim_time': 'false' if use_sim_time == "no" else 'true',
-		}.items()
+		# launch_arguments={
+		# 	'use_sim_time': 'false' if is_simulate == "no" else 'true',
+		# }.items()
 	)
 
 	run_lidar_cmd = IncludeLaunchDescription(
@@ -91,7 +91,7 @@ def generate_launch_description():
 			"navigation.launch.py"
 		),
 		launch_arguments={
-			'use_sim_time': 'false' if use_sim_time == "no" else 'true',
+			'use_sim_time': "true" if is_simulate == "yes" else "false",
 		}.items()
 	)
 
@@ -102,7 +102,7 @@ def generate_launch_description():
 			"localization.launch.py"
 		),
 		launch_arguments={
-			'use_sim_time': 'false' if use_sim_time == "no" else 'true',
+			'use_sim_time': "true" if is_simulate == "yes" else "false",
 		}.items()
 	)
 
@@ -113,18 +113,22 @@ def generate_launch_description():
 			"slam_online_async.launch.py"
 		),
 		launch_arguments={
-			'use_sim_time': 'false' if use_sim_time == "no" else 'true',
+			'use_sim_time': "true" if is_simulate == "yes" else "false",
 		}.items()
 	)
 
+	# delay 10s before create controller manager
+	start_delayed_localization_cmd = TimerAction(period=20.0, actions=[run_localization_cmd])
+
 	return LaunchDescription([
-		declare_use_sim_time,
+		declare_is_simulate,
 		start_robot_state_publisher_cmd,
 		run_controllers_cmd,
 		run_joystick_cmd,
-		run_navigation_stack_cmd,
-		run_localization_cmd,
-		run_slam_toolbox_cmd,
 		run_twist_mux_cmd,
 		run_lidar_cmd,
+		# run_slam_toolbox_cmd,
+		run_navigation_stack_cmd,
+		start_delayed_localization_cmd,
+
 	])

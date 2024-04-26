@@ -12,10 +12,10 @@ extern "C" {
 
 #include "motor_driver.h"
 
-#define LEFT_WHL_ENC_INT 25
-#define RIGHT_WHL_ENC_INT 24
+#define LEFT_WHL_ENC_INT 24
+#define RIGHT_WHL_ENC_INT 23
 #define LEFT_WHL_ENC_DIR 22
-#define RIGHT_WHL_ENC_DIR 23
+#define RIGHT_WHL_ENC_DIR 25
 
 void handler(int signo);
 void left_wheel_pulse();
@@ -23,7 +23,7 @@ void right_wheel_pulse();
 void set_motor_speeds(double left_wheel_command, double right_wheel_command);
 void read_encoder_values(int *left_encoder_value, int *right_encoder_value);
 
-extern int left_wheel_pulse_count;
+extern int interrupt_wheel_pulse_count;
 extern int right_wheel_pulse_count;
 extern int left_wheel_direction;
 extern int right_wheel_direction;

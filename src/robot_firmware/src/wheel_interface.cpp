@@ -135,6 +135,7 @@ std::vector<hardware_interface::CommandInterface> WheelInterface::export_command
 hardware_interface::return_type WheelInterface::read(const rclcpp::Time &/*time*/, const rclcpp::Duration &duration)
 {
 	// RCLCPP_INFO(logger, "WheelInterface::read()");
+	// RCLCPP_INFO(logger, "-------------------------------------------------------------------");
 
 	// Obtain elapsed time
 	double delta_seconds = duration.seconds();
@@ -142,14 +143,23 @@ hardware_interface::return_type WheelInterface::read(const rclcpp::Time &/*time*
 	// Obtain encoder values
 	read_encoder_values(&left_wheel_.encoder_ticks, &right_wheel_.encoder_ticks);
 
+	// left_wheel_.encoder_ticks = left_wheel_.encoder_ticks  * 100.0 / 98.1;
+	// right_wheel_.encoder_ticks = right_wheel_.encoder_ticks  * 100.0 / 95;
+
+	// RCLCPP_INFO(logger, "left_wheel_.encoder_ticks = %d, right_wheel_.encoder_ticks = %d", left_wheel_.encoder_ticks, right_wheel_.encoder_ticks);
+
 	// Calculate wheel positions and velocities
 	double previous_position = left_wheel_.position;
 	left_wheel_.position = left_wheel_.calculate_encoder_angle();
 	left_wheel_.velocity = (left_wheel_.position - previous_position) / delta_seconds;
+	// left_wheel_.velocity = 0 - left_wheel_.velocity;
 
 	previous_position = right_wheel_.position;
 	right_wheel_.position = right_wheel_.calculate_encoder_angle();
 	right_wheel_.velocity = (right_wheel_.position - previous_position) / delta_seconds;
+
+	
+	// RCLCPP_INFO(logger, "ntdat left_wheel_.velocity = %f, right_wheel_.velocity = %f", left_wheel_.velocity, right_wheel_.velocity);
 
 	return hardware_interface::return_type::OK;
 }
@@ -160,15 +170,16 @@ hardware_interface::return_type WheelInterface::read(const rclcpp::Time &/*time*
 hardware_interface::return_type WheelInterface::write(const rclcpp::Time &/*time*/, const rclcpp::Duration &/*duration*/)
 {
 	// RCLCPP_INFO(logger, "WheelInterface::write()");
-	// RCLCPP_INFO(logger, "Mikey write velocity_commands_ = %0.5f - %0.5f", velocity_commands_.at(0), velocity_commands_.at(1));
+	// RCLCPP_INFO(logger, "left_wheel_.command = %f - right_wheel_.command = %f", left_wheel_.command, right_wheel_.command);
 
 	double left_motor_counts_per_loop = left_wheel_.command / left_wheel_.rads_per_tick / config_.loop_rate;
 	double right_motor_counts_per_loop = right_wheel_.command / right_wheel_.rads_per_tick / config_.loop_rate;
 
-	// RCLCPP_INFO(logger, "ntdat left_wheel_.command = %f, right_wheel_.command = %f", left_wheel_.command, right_wheel_.command);
+	// RCLCPP_INFO(logger, "ntdat left_motor_counts_per_loop = %f, right_motor_counts_per_loop = %f", left_motor_counts_per_loop, right_motor_counts_per_loop);
 
 	// Send commands to motor driver
 	set_motor_speeds(left_motor_counts_per_loop, right_motor_counts_per_loop);
+	// RCLCPP_INFO(logger, "-------------------------------------------------------------------");
 	
 	return hardware_interface::return_type::OK;
 }

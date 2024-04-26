@@ -9,7 +9,7 @@
 	
 	<class name="robot_firmware/MPU6050Interface"
 			type="robot_firmware_interfaces::MPU6050Interface"
-			base_class_type="hardware_interface::SystemInterface">
+			base_class_type="hardware_interface::SensorInterface">
 		<description>
 			The ros2_control hardware interface for the lidarbot that uses the IMU sensor MPU6050to read gyroscope info
 		</description>

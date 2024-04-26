@@ -77,7 +77,7 @@ def generate_launch_description():
 
 	declare_map_yaml_cmd = DeclareLaunchArgument(
 		'map',
-		default_value=os.path.join(navigation_dir, 'config', 'sim_map.yaml'),
+		default_value=os.path.join(navigation_dir, 'maps', 'mikey_map.yaml'),
 		description='Full path to map yaml file to load')
 
 	declare_use_sim_time_cmd = DeclareLaunchArgument(
@@ -199,6 +199,6 @@ def generate_launch_description():
 	ld.add_action(load_nodes)
 	ld.add_action(load_composable_nodes)
 
-	ld.add_action(ekf_localization_node)
+	# ld.add_action(ekf_localization_node)
 
 	return ld

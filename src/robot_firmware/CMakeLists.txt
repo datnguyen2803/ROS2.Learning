@@ -21,6 +21,9 @@ add_library(robot_firmware SHARED
 	src/motor_encoder.c
 	src/PCA9685.c
 	src/wheel.cpp
+	
+	src/imu_mpu6050_interface.cpp
+	src/lib_mpu6050.cpp
 )
 
 target_include_directories(robot_firmware PRIVATE include)
@@ -35,7 +38,7 @@ ament_target_dependencies(
 )
 
 # Link WiringPi library to lidarbot_hardware target
-target_link_libraries(robot_firmware wiringPi)
+target_link_libraries(robot_firmware wiringPi i2c)
 
 # Export hardware plugin
 pluginlib_export_plugin_description_file(hardware_interface robot_firmware_interfaces.xml)
@@ -65,7 +68,21 @@ include_directories(include)
 
 # EXPORTS
 ament_export_libraries(robot_firmware)
-ament_export_targets(export_robot_firmware HAS_LIBRARY_TARGET)
+
+# create executables
+add_executable(mpu6050_covariances src/lib_mpu6050.cpp src/mpu6050_covariances.cpp)
+add_executable(mpu6050_offsets src/lib_mpu6050.cpp src/mpu6050_offsets.cpp)
+
+# Install Cpp executables
+install(TARGETS
+  mpu6050_offsets
+  mpu6050_covariances
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+# Link i2c to mpu6050_offsets and mpu6050_covariances targets
+target_link_libraries(mpu6050_offsets i2c)
+target_link_libraries(mpu6050_covariances i2c)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

@@ -3,12 +3,12 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot">
 
 	<!-- load parameters from launch file -->
-	<xacro:arg name="is_simulate" default="no" />
+	<xacro:arg name="is_simulate" default="false" />
 
 	<!-- load from other xacro files -->
-	<xacro:include filename="robot_core.xacro" />
+	<xacro:include filename="test_core.xacro" />
 
-	<xacro:if value="${is_simulate == yes}">
+	<xacro:if value="$(arg is_simulate)">
 		<xacro:include filename="gazebo.xacro" />
 	</xacro:if>
 

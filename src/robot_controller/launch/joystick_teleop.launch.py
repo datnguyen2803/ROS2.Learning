@@ -31,15 +31,16 @@ def generate_launch_description():
 
 
 	# Use when publish geometry_msgs/msg/Twist
-	joy_teleop = Node(
+	joy_twist_teleop = Node(
 		package="teleop_twist_joy",
 		executable="teleop_node",
-		name="teleop_twist_joy",
+		name="joy_twist_teleop",
 		parameters=[os.path.join(get_package_share_directory('robot_controller'), 'config', 'joystick_teleop.yaml')],
 		remappings=[('/cmd_vel', '/cmd_vel_joy')]
 	)
 
 	return LaunchDescription([
 		joy_node,
-		joy_teleop,
+		# joy_teleop,
+		joy_twist_teleop,
 	])

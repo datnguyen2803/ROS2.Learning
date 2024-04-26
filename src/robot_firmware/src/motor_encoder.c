@@ -27,7 +27,7 @@ void left_wheel_pulse()
     // Read encoder direction value for left wheel
     left_wheel_direction = digitalRead(LEFT_WHL_ENC_DIR); 
 
-    if(left_wheel_direction == 1)
+    if(left_wheel_direction == 0)
         left_wheel_pulse_count++;
     else 
         left_wheel_pulse_count--;
@@ -43,7 +43,7 @@ void right_wheel_pulse()
     // Read encoder direction value for right wheel
     right_wheel_direction = digitalRead(RIGHT_WHL_ENC_DIR);
 
-    if(right_wheel_direction == 1)
+    if(right_wheel_direction == 0)
         right_wheel_pulse_count++;
     else 
         right_wheel_pulse_count--;
@@ -74,11 +74,16 @@ void set_motor_speeds(double left_wheel_command, double right_wheel_command)
     else
         right_motor_direction = BACKWARD;
 
+
+	// hard code
+	// left_wheel_direction = (int) left_motor_direction;
+	// right_wheel_direction = (int) right_motor_direction;
+
     // Run motors with specified direction and speeds
 	printf("mikey check fabs(left_motor_speed) = %f\n", fabs(left_motor_speed));
 	printf("mikey check fabs(right_motor_speed) = %f\n", fabs(right_motor_speed));
-    Motor_Run(MOTORA, left_motor_direction, (int) fabs(left_motor_speed));
-    Motor_Run(MOTORB, right_motor_direction, (int) fabs(right_motor_speed));
+    Motor_Run(MOTORB, left_motor_direction, (int) fabs(left_motor_speed));
+    Motor_Run(MOTORA, right_motor_direction, (int) fabs(right_motor_speed));
 }
 
 void handler(int signo)

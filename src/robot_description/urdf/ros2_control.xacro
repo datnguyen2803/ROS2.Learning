@@ -4,7 +4,7 @@
 	<ros2_control name="MotionPart" type="system">
 
 		<!-- ros2_control interfaces in gazebo env -->
-		<xacro:if value="${is_simulate == yes}">
+		<xacro:if value="$(arg is_simulate)">
 			<hardware>
 				<plugin>gazebo_ros2_control/GazeboSystem</plugin>
 			</hardware>
@@ -12,7 +12,7 @@
 
 
 		<!-- load interfaces for real robot -->
-		<xacro:unless value="${is_simulate == yes}">
+		<xacro:unless value="$(arg is_simulate)">
 			<hardware>
 				<plugin>robot_firmware/WheelInterface</plugin>
 			</hardware>
@@ -38,7 +38,7 @@
 
 	</ros2_control>
 
-	<xacro:unless value="${is_simulate == yes}">
+	<xacro:unless value="$(arg is_simulate)">
 		<ros2_control name="SensorPart" type="sensor">
 			<hardware>
 				<plugin>robot_firmware/MPU6050Interface</plugin>

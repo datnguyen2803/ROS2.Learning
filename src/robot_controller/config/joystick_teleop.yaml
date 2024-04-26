@@ -16,7 +16,7 @@ joy_teleop:
           scale: 1.0
           offset: 0.0
 
-teleop_twist_joy:
+joy_twist_teleop:
   ros__parameters:
     # axis_linear:
     #   x: 1
@@ -35,12 +35,12 @@ teleop_twist_joy:
     axis_linear:
       x: 1
     scale_linear:
-      x: 0.5
+      x: 1.0
       
     axis_angular:
       yaw: 3
     scale_angular:
-      yaw: -5.0
+      yaw: 10.0
 
     enable_button: 5
     # enable_turbo_button: 7

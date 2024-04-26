@@ -22,7 +22,7 @@ class WheelInterface : public hardware_interface::SystemInterface
 private:
 	struct Config
 	{
-		int enc_ticks_per_rev = 1084;
+		int enc_ticks_per_rev = 260;
 		double loop_rate = 30.0;
 	};
 
