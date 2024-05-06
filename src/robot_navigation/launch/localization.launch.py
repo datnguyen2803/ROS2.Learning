@@ -29,7 +29,6 @@ from nav2_common.launch import RewrittenYaml
 def generate_launch_description():
 	# Get the launch directory
 	navigation_dir = get_package_share_directory('robot_navigation')
-	ekf_params_file = os.path.join(get_package_share_directory('robot_navigation'), "config/ekf.yaml")
 
 	namespace = LaunchConfiguration('namespace')
 	map_yaml_file = LaunchConfiguration('map')
@@ -171,13 +170,6 @@ def generate_launch_description():
 		],
 	)
 
-	# Start robot localization using an Extended Kalman Filter
-	ekf_localization_node = Node(
-		package="robot_localization",
-		executable="ekf_node",
-		parameters=[ekf_params_file],
-	)
-
 	# Create the launch description and populate
 	ld = LaunchDescription()
 
@@ -198,7 +190,5 @@ def generate_launch_description():
 	# Add the actions to launch all of the localiztion nodes
 	ld.add_action(load_nodes)
 	ld.add_action(load_composable_nodes)
-
-	# ld.add_action(ekf_localization_node)
 
 	return ld

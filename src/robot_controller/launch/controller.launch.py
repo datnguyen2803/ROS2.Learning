@@ -114,9 +114,9 @@ def generate_launch_description():
 		start_delayed_controller_manager_cmd,
 		start_delayed_diff_drive_controller_cmd,
 		start_delayed_joint_state_broadcaster_cmd, 
-		# start_delayed_imu_broadcaster_cmd,
+		start_delayed_imu_broadcaster_cmd,
 
-		# ekf_localization_node,
+		ekf_localization_node,
 
 		# start_diff_drive_controller_cmd,
 

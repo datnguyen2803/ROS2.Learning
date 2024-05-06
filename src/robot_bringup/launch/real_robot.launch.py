@@ -117,8 +117,17 @@ def generate_launch_description():
 		}.items()
 	)
 
-	# delay 10s before create controller manager
-	start_delayed_localization_cmd = TimerAction(period=20.0, actions=[run_localization_cmd])
+	run_camera_cmd = Node(
+		package='v4l2_camera',
+		executable='v4l2_camera_node',
+		output='screen',
+		namespace='camera',
+		parameters=[{
+			'image_size': [640, 480],
+			'time_per_frame': [1, 6],
+			'camera_frame_id': 'camera_link_optical'
+			}]
+	)
 
 	return LaunchDescription([
 		declare_is_simulate,
@@ -128,7 +137,9 @@ def generate_launch_description():
 		run_twist_mux_cmd,
 		run_lidar_cmd,
 		# run_slam_toolbox_cmd,
-		run_navigation_stack_cmd,
-		start_delayed_localization_cmd,
+		# run_navigation_stack_cmd,
+		# run_localization_cmd,
+
+		# run_camera_cmd,
 
 	])
