@@ -24,6 +24,8 @@ add_library(robot_firmware SHARED
 	
 	src/imu_mpu6050_interface.cpp
 	src/lib_mpu6050.cpp
+
+	src/mop_interface.cpp
 )
 
 target_include_directories(robot_firmware PRIVATE include)

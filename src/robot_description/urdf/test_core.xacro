@@ -273,6 +273,23 @@
     <origin xyz="0.045 0 0.0175" rpy="0 0 0"/> 
   </joint>
 
+  <!-- Mop -->
+  <link name="mop_link">
+	<visual name="mop_visual">
+		<origin xyz="0.105 0 0.0175" rpy="0 0 0"/>
+		<geometry>
+			<cylinder length="0.06" radius="0.02"/>
+		</geometry>
+	</visual>
+  </link>
+
+  <joint name="mop_joint" type="continuous">
+    <parent link="base_link"/>
+	<child link="mop_link"/>
+	<origin xyz="0 0 0" rpy="0 0 0"/>
+	<axis xyz="0 0 1"/>
+  </joint>
+
   <!-- <gazebo reference="caster_wheel">
     <mu1 value="0.001"/>
     <mu2 value="0.001"/>

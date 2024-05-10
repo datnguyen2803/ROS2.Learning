@@ -73,6 +73,15 @@ def generate_launch_description():
 			"--controller-manager", "/controller_manager"
 		]
 	)
+	start_mop_cmd = Node(
+		package="controller_manager",
+		executable="spawner",
+		arguments=["mop_controller",
+			"--controller-manager", "/controller_manager"
+		],
+		# prefix=['xterm -e gdb -ex run --args'],
+		# output='screen',
+	)
 
 	# load controllers until controller manager is ready
 	start_delayed_diff_drive_controller_cmd = RegisterEventHandler(
@@ -107,16 +116,26 @@ def generate_launch_description():
 		parameters=[ekf_params_file],
 	)
 
+	start_mop_delayed_cmd = RegisterEventHandler(
+		# condition=UnlessCondition(use_sim_time),
+		event_handler=OnProcessStart(
+			target_action=start_controller_manager_cmd,
+			on_start=[start_mop_cmd]
+		)
+	)
 
 	return LaunchDescription([
 		declare_use_sim_time,
 		declare_rsp_node_name,
 		start_delayed_controller_manager_cmd,
-		start_delayed_diff_drive_controller_cmd,
-		start_delayed_joint_state_broadcaster_cmd, 
-		start_delayed_imu_broadcaster_cmd,
+		# start_delayed_diff_drive_controller_cmd,
+		# start_delayed_joint_state_broadcaster_cmd,
+		# start_delayed_imu_broadcaster_cmd,
 
-		ekf_localization_node,
+		# ekf_localization_node,
+
+		start_mop_delayed_cmd,
+		
 
 		# start_diff_drive_controller_cmd,
 

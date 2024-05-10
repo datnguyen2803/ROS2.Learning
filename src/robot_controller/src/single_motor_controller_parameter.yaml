@@ -1,0 +1,42 @@
+single_motor_controller:
+  joint_names: {
+    type: string_array,
+    default_value: [ư],
+    description: "Joint names of the motors",
+  }
+  tf_frame_prefix_enable: {
+    type: bool,
+    default_value: true,
+    description:  "Enables or disables appending tf_prefix to tf frame id's.",
+  }
+  tf_frame_prefix: {
+    type: string,
+    default_value: "",
+    description:  "(optional) Prefix to be appended to the tf frames, will be added to odom_id and base_frame_id before publishing. If the parameter is empty, controller's namespace will be used.",
+  }
+  odom_frame_id: {
+    type: string,
+    default_value: "odom",
+    description:  "Name of the frame for odometry. This frame is parent of ``base_frame_id`` when controller publishes odometry.",
+  }
+  base_frame_id: {
+    type: string,
+    default_value: "base_link",
+    description: "Name of the robot's base frame that is child of the odometry frame.",
+  }
+  publish_rate: {
+    type: double,
+    default_value: 50.0, # Hz
+    description: "Publishing rate (Hz) of the odometry and TF messages.",
+  }
+  velocity:
+    max: {
+      type: double,
+      default_value: 1.0,
+      description: "Maximum velocity of the motor in rad/s.",
+    }
+    min: {
+      type: double,
+      default_value: -1.0,
+      description: "Minimum velocity of the motor in rad/s.",
+    }

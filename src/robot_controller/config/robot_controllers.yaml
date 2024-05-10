@@ -11,6 +11,9 @@ controller_manager:
 
     imu_broadcaster:
       type: imu_sensor_broadcaster/IMUSensorBroadcaster 
+    
+    mop_controller:
+      type: robot_controller/SingleMotorController
 
 
 wheel_controller:

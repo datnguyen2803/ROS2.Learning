@@ -57,6 +57,14 @@ def generate_launch_description():
 		}.items()
 	)
 
+	start_controllers_delayed_cmd = RegisterEventHandler(
+		# condition=UnlessCondition(use_sim_time),
+		event_handler=OnProcessStart(
+			target_action=start_robot_state_publisher_cmd,
+			on_start=[run_controllers_cmd]
+		)
+	)
+
 	run_joystick_cmd = IncludeLaunchDescription(
 		os.path.join(
 			package_path_robot_controller,
@@ -132,10 +140,10 @@ def generate_launch_description():
 	return LaunchDescription([
 		declare_is_simulate,
 		start_robot_state_publisher_cmd,
-		run_controllers_cmd,
-		run_joystick_cmd,
-		run_twist_mux_cmd,
-		run_lidar_cmd,
+		start_controllers_delayed_cmd,
+		# run_joystick_cmd,
+		# run_twist_mux_cmd,
+		# run_lidar_cmd,
 		# run_slam_toolbox_cmd,
 		# run_navigation_stack_cmd,
 		# run_localization_cmd,
