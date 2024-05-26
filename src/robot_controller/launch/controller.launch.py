@@ -36,23 +36,24 @@ def generate_launch_description():
 
 	# create controller manager
 	start_controller_manager_cmd = Node(
-		# condition=UnlessCondition(use_sim_time),
+		condition=UnlessCondition(use_sim_time),
 		package='controller_manager',
 		executable='ros2_control_node',
 		parameters=[
 			{
 				'robot_description': robot_description,
-				# 'use_sim_time': use_sim_time,
+				'use_sim_time': use_sim_time,
 			},
 			controller_manager_params_file
 		]
 	)
 
-	# delay 1s before create controller manager
-	start_delayed_controller_manager_cmd = TimerAction(period=5.0, actions=[start_controller_manager_cmd])
+	# delay 2s before create controller manager
+	start_delayed_controller_manager_cmd = TimerAction(period=2.0, actions=[start_controller_manager_cmd])
 
 	# spawner != ros2_control_node that spawner runs only once but ros2_control_node spins
 	start_diff_drive_controller_cmd = Node(
+		condition=UnlessCondition(use_sim_time),
 		package="controller_manager",
 		executable="spawner",
 		arguments=["wheel_controller",
@@ -60,6 +61,7 @@ def generate_launch_description():
 		]
 	)
 	start_joint_state_broadcaster_cmd = Node(
+		condition=UnlessCondition(use_sim_time),
 		package="controller_manager",
 		executable="spawner",
 		arguments=["joint_state_broadcaster",
@@ -67,6 +69,7 @@ def generate_launch_description():
 		]
 	)
 	start_imu_broadcaster_cmd = Node(
+		condition=UnlessCondition(use_sim_time),
 		package="controller_manager",
 		executable="spawner",
 		arguments=["imu_broadcaster",
@@ -74,6 +77,7 @@ def generate_launch_description():
 		]
 	)
 	start_mop_cmd = Node(
+		condition=UnlessCondition(use_sim_time),
 		package="controller_manager",
 		executable="spawner",
 		arguments=["mop_controller",
@@ -85,7 +89,6 @@ def generate_launch_description():
 
 	# load controllers until controller manager is ready
 	start_delayed_diff_drive_controller_cmd = RegisterEventHandler(
-		# condition=UnlessCondition(use_sim_time),
 		event_handler=OnProcessStart(
 			target_action=start_controller_manager_cmd,
 			on_start=[start_diff_drive_controller_cmd]
@@ -93,7 +96,6 @@ def generate_launch_description():
 	)
 
 	start_delayed_joint_state_broadcaster_cmd = RegisterEventHandler(
-		# condition=UnlessCondition(use_sim_time),
 		event_handler=OnProcessStart(
 			target_action=start_controller_manager_cmd,
 			on_start=[start_joint_state_broadcaster_cmd]
@@ -101,16 +103,16 @@ def generate_launch_description():
 	)
 
 	start_delayed_imu_broadcaster_cmd = RegisterEventHandler(
-		# condition=UnlessCondition(use_sim_time),
 		event_handler=OnProcessStart(
 			target_action=start_controller_manager_cmd,
 			on_start=[start_imu_broadcaster_cmd]
 		)
 	)
 
-	ekf_params_file = os.path.join(get_package_share_directory('robot_navigation'), "config/ekf.yaml")
+	ekf_params_file = os.path.join(get_package_share_directory('robot_controller'), "config/ekf.yaml")
 		# Start robot localization using an Extended Kalman Filter
 	ekf_localization_node = Node(
+		condition=UnlessCondition(use_sim_time),
 		package="robot_localization",
 		executable="ekf_node",
 		parameters=[ekf_params_file],
@@ -128,15 +130,12 @@ def generate_launch_description():
 		declare_use_sim_time,
 		declare_rsp_node_name,
 		start_delayed_controller_manager_cmd,
-		# start_delayed_diff_drive_controller_cmd,
-		# start_delayed_joint_state_broadcaster_cmd,
-		# start_delayed_imu_broadcaster_cmd,
+		start_delayed_diff_drive_controller_cmd,
+		start_delayed_joint_state_broadcaster_cmd,
+		start_delayed_imu_broadcaster_cmd,
 
-		# ekf_localization_node,
+		ekf_localization_node,
 
-		start_mop_delayed_cmd,
-		
-
-		# start_diff_drive_controller_cmd,
+		# start_mop_delayed_cmd,
 
 	])

@@ -68,8 +68,31 @@
     </plugin>
   </gazebo>
 
+  <!-- DIFF DRIVE -->
+  <gazebo>
+    <plugin name="gazebo_wheel_controller" filename="libgazebo_ros_diff_drive.so">
+      <!-- <commandTopic>gazebo_wheel_controller/cmd_vel_unstamped</commandTopic> -->
+      <!-- Wheel information -->
+      <left_joint>wheel_left_joint</left_joint>
+      <right_joint>wheel_right_joint</right_joint>
+      <wheel_separation>0.134</wheel_separation>
+      <wheel_diameter>0.067</wheel_diameter>
+      <!-- Limits (can be adjusted later on)-->
+      <max_wheel_torque>20</max_wheel_torque>
+      <max_wheel_acceleration>2</max_wheel_acceleration>
+      
+      <!-- Output -->
+      <odometry_frame>odom</odometry_frame>
+      <robot_base_frame>base_footprint</robot_base_frame>
+      <publish_odom>true</publish_odom>
+      <publish_odom_tf>true</publish_odom_tf>     
+      <publish_wheel_tf>true</publish_wheel_tf>
+      
+    </plugin>
+  </gazebo>
+
   <!-- IMU -->
-  <!-- <gazebo reference="imu_link">
+  <gazebo reference="imu_link">
     <sensor name="imu" type="imu">
         <always_on>true</always_on>
         <update_rate>100</update_rate>
@@ -115,10 +138,11 @@
             </z>
           </linear_acceleration>
         </imu>
-        <plugin name="imu" filename="libgazebo_ros_imu_sensor.so"/>
+        <plugin name="gazebo_imu" filename="libgazebo_ros_imu_sensor.so"/>
     </sensor>
-  </gazebo> -->
+  </gazebo>
 
+  <!-- LIDAR -->
   <gazebo reference="lidar_link">
     <sensor name="lidar" type="ray">
       <pose>0 0 0 0 0 0</pose>

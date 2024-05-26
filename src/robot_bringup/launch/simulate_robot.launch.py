@@ -12,20 +12,11 @@ def generate_launch_description():
 
 	# some variables
 	rsp_node_name = 'robot_state_publisher_node'
-	is_simulate = "false"
+	is_simulate = "true"
 
 	# packages path
 	package_path_robot_controller = get_package_share_directory("robot_controller")
 	package_path_robot_navigation = get_package_share_directory("robot_navigation")
-
-	# is_simulate = LaunchConfiguration("is_simulate") # yes or no
-
-	# # Declare the launch arguments
-	# declare_is_simulate = DeclareLaunchArgument(
-	# 	name="is_simulate",
-	# 	default_value="no",
-	# 	description="Use simulation (Gazebo) clock if yes",
-	# )
 
 	is_scanning_map = LaunchConfiguration("is_scanning_map") # true or false
 	declare_is_scanning_map = DeclareLaunchArgument(
@@ -33,6 +24,7 @@ def generate_launch_description():
 		default_value="true",
 		description="Run slam toolbox and disable localization if true",
 	)
+
 
 	# run command xacro ... to generate a string
 	robot_state_publisher_params = ParameterValue(
@@ -54,9 +46,26 @@ def generate_launch_description():
 		parameters=[{'robot_description': robot_state_publisher_params}],
 	)
 
+	run_rviz_cmd = IncludeLaunchDescription(
+		os.path.join(
+			get_package_share_directory("robot_description"),
+			"launch",
+			"sim_display.launch.py"
+		),
+	)
+
+	run_gazebo_cmd = IncludeLaunchDescription(
+		os.path.join(
+			get_package_share_directory("robot_description"),
+			"launch",
+			"sim_gazebo.launch.py"
+		),
+		condition=IfCondition(is_simulate),
+	)
+
 	run_controllers_cmd = IncludeLaunchDescription(
 		os.path.join(
-			package_path_robot_controller,
+			get_package_share_directory("robot_controller"),
 			"launch",
 			"controller.launch.py"
 		),
@@ -68,7 +77,7 @@ def generate_launch_description():
 
 	run_joystick_cmd = IncludeLaunchDescription(
 		os.path.join(
-			package_path_robot_controller,
+			get_package_share_directory("robot_controller"),
 			"launch",
 			"joystick_teleop.launch.py"
 		),
@@ -82,26 +91,18 @@ def generate_launch_description():
 		),
 		launch_arguments={
 			'use_sim_time': is_simulate,
-		}.items(),
-	)
-
-	run_lidar_cmd = IncludeLaunchDescription(
-		os.path.join(
-			package_path_robot_controller,
-			"launch",
-			"lidar.launch.py"
-		),
+		}.items()
 	)
 
 	run_navigation_stack_cmd = IncludeLaunchDescription(
 		os.path.join(
-			package_path_robot_navigation,
+			get_package_share_directory("robot_navigation"),
 			"launch",
 			"navigation.launch.py"
 		),
 		launch_arguments={
-			'use_sim_time': is_simulate,
-		}.items()
+			'use_sim_time': 'true',
+			}.items()
 	)
 
 	run_localization_cmd = IncludeLaunchDescription(
@@ -128,29 +129,15 @@ def generate_launch_description():
 		}.items()
 	)
 
-	run_camera_cmd = Node(
-		package='v4l2_camera',
-		executable='v4l2_camera_node',
-		output='screen',
-		namespace='camera',
-		parameters=[{
-			'image_size': [640, 480],
-			'time_per_frame': [1, 6],
-			'camera_frame_id': 'camera_link_optical'
-			}]
-	)
-
 	return LaunchDescription([
 		declare_is_scanning_map,
 		start_robot_state_publisher_cmd,
+		run_rviz_cmd,
+		run_gazebo_cmd,
 		run_controllers_cmd,
 		run_joystick_cmd,
 		run_twist_mux_cmd,
-		run_lidar_cmd,
-		run_navigation_stack_cmd,
-		run_localization_cmd,
-		run_slam_toolbox_cmd,
-
-		# run_camera_cmd,
-
+		# run_navigation_stack_cmd,
+		# run_slam_toolbox_cmd,
+		# run_localization_cmd,
 	])

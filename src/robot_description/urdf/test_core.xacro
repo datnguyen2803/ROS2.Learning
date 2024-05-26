@@ -274,7 +274,7 @@
   </joint>
 
   <!-- Mop -->
-  <link name="mop_link">
+  <!-- <link name="mop_link">
 	<visual name="mop_visual">
 		<origin xyz="0.105 0 0.0175" rpy="0 0 0"/>
 		<geometry>
@@ -288,7 +288,7 @@
 	<child link="mop_link"/>
 	<origin xyz="0 0 0" rpy="0 0 0"/>
 	<axis xyz="0 0 1"/>
-  </joint>
+  </joint> -->
 
   <!-- <gazebo reference="caster_wheel">
     <mu1 value="0.001"/>
